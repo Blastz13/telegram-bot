@@ -44,6 +44,17 @@ def get_week_homework():
     answer = db.get_week_homework("homework", date)
     return answer
 
+def get_timetable_dayweek(raw_message):
+    answer = db.get_timetable_dayweek("timesheet", raw_message)
+    return answer
+
+def get_all_timetable():
+    return db.get_all_timetable("timesheet")
+
+def delete_homework(raw_message):
+    raw_message=list(raw_message.split())
+    answer=db.delete_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
+
 
 def _get_today_date():
     return datetime.datetime.today().strftime('%Y-%m-%d')
@@ -61,8 +72,5 @@ def _get_week_date():
     week=Week(date_start.strftime('%Y-%m-%d'), date_end.strftime('%Y-%m-%d'))
     return week
 
-def get_timetable_dayweek(raw_message):
-    answer = db.get_timetable_dayweek("timesheet", raw_message)
-    return answer
 
-print(get_timetable_dayweek("Понедельник"))
+print(delete_homework("Понедельник 1 02-02-2020"))

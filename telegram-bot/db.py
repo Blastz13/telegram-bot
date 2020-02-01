@@ -146,10 +146,10 @@ def get_all_timetable(table: str) -> List[Tuple]:
 
 
 #Delete
-def delete_homework_homework(table: str, dayweek: str, num: str):
+def delete_homework_homework(table: str, dayweek: str, num: str, date: str):
     """Remove lesson from timetable"""
     cursor.execute(f"""DELETE FROM '{table}' 
-                        WHERE dayweek='{dayweek}' AND num='{num}'""")
+                        WHERE dayweek='{dayweek}' AND num='{num}' AND date='{date}'""")
     rows = conn.commit()
     
     return rows   
@@ -166,7 +166,7 @@ def edit_timetable_lesson(table: str, dayweek: str, num: int, lesson: str):
     return rows
 
 def edit_homework_homework(table: str, dayweek: str, num: int, lesson: str):
-    """Edits a lesson"""
+    """Edits a homework"""
     cursor.execute(f"""UPDATE '{table}' 
                         SET homework='{homework}' 
                         WHERE num='{num}' and dayweek='{dayweek}'""")
