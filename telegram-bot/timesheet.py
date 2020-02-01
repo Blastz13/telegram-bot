@@ -53,8 +53,15 @@ def get_all_timetable():
 
 def delete_homework(raw_message):
     raw_message=list(raw_message.split())
-    answer=db.delete_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
+    answer = db.delete_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
 
+def edit_timetable_lesson(raw_message):
+    raw_message=list(raw_message.split())
+    answer = db.edit_timetable_lesson("timesheet", raw_message[0], raw_message[1], raw_message[2])
+
+def edit_homework(raw_message):
+    raw_message=list(raw_message.split())
+    answer = db.edit_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
 
 def _get_today_date():
     return datetime.datetime.today().strftime('%Y-%m-%d')
@@ -71,6 +78,3 @@ def _get_week_date():
     date_end = date_start + datetime.timedelta(days=6)
     week=Week(date_start.strftime('%Y-%m-%d'), date_end.strftime('%Y-%m-%d'))
     return week
-
-
-print(delete_homework("Понедельник 1 02-02-2020"))

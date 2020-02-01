@@ -165,7 +165,7 @@ def edit_timetable_lesson(table: str, dayweek: str, num: int, lesson: str):
     
     return rows
 
-def edit_homework_homework(table: str, dayweek: str, num: int, lesson: str):
+def edit_homework_homework(table: str, dayweek: str, num: int, homework: str):
     """Edits a homework"""
     cursor.execute(f"""UPDATE '{table}' 
                         SET homework='{homework}' 
