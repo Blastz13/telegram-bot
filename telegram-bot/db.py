@@ -98,32 +98,41 @@ def create_timetable_lesson(table: str, column_values: Dict):
 # insert_homework ("homework", {"dayweek":"Пятница","lesson":"Астрономия","homework":"Параграф 1","num":2,"date":"07-02-2020"})
 
 def get_today_homework(table: str, date: str) -> List[Tuple]:
-
     # cursor.execute(f"SELECT timesheet.dayweek, timesheet.num, timesheet.lesson, homework.homework FROM timesheet LEFT OUTER JOIN homework ON homework.dayweek = timesheet.dayweek, homework.num = timesheet.num")
-    cursor.execute(f"SELECT timesheet.dayweek , timesheet.num, timesheet.lesson , homework.homework FROM homework INNER JOIN timesheet ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num WHERE homework.date = '{date}'")
+    cursor.execute(f"""SELECT timesheet.dayweek , timesheet.num, timesheet.lesson , homework.homework 
+                        FROM homework INNER JOIN timesheet 
+                        ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num 
+                        WHERE homework.date = '{date}'""")
     rows = cursor.fetchall()
     return rows
 # print(get_today_homework("homework","04-02-2020"))
 # create_timetable_lesson("homework", {"dayweek":"Вторник","lesson":"Химия","homework":"Параграф 3","num":1,"date":"04-02-2020"})
 
 def get_tomorow_homework(table: str, date: str) -> List[Tuple]:
-
     # cursor.execute(f"SELECT timesheet.dayweek, timesheet.num, timesheet.lesson, homework.homework FROM timesheet LEFT OUTER JOIN homework ON homework.dayweek = timesheet.dayweek, homework.num = timesheet.num")
-    cursor.execute(f"SELECT timesheet.dayweek , timesheet.num, timesheet.lesson , homework.homework FROM homework INNER JOIN timesheet ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num WHERE homework.date = '04-02-2020'")
+    cursor.execute(f"""SELECT timesheet.dayweek , timesheet.num, timesheet.lesson , homework.homework 
+                        FROM homework INNER JOIN timesheet 
+                        ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num 
+                        WHERE homework.date = '{date}'""")
     rows = cursor.fetchall()
     return rows
 
-def get_week_homework(table: str, date: str) -> List[Tuple]:
-
+def get_week_homework(table: str, date) -> List[Tuple]:
+    print(date)
     # cursor.execute(f"SELECT timesheet.dayweek, timesheet.num, timesheet.lesson, homework.homework FROM timesheet LEFT OUTER JOIN homework ON homework.dayweek = timesheet.dayweek, homework.num = timesheet.num")
-    cursor.execute(f"SELECT timesheet.dayweek, homework.date, timesheet.num, timesheet.lesson , homework.homework FROM homework INNER JOIN timesheet ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num where date between '04-02-2020' and '11-02-2020'")
+    cursor.execute(f"""SELECT timesheet.dayweek, homework.date, timesheet.num, timesheet.lesson , homework.homework 
+                        FROM homework INNER JOIN timesheet 
+                        ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num 
+                        WHERE date BETWEEN '{date.date_start}' AND '{date.date_end}'""")
     rows = cursor.fetchall()
     return rows
 
 def get_timetable_dayweek(table: str, dayweek: str) -> List[Tuple]:
     """Displays the schedule for the day of the week"""
     columns_joined = ", ".join(dayweek)
-    cursor.execute(f"SELECT * FROM {table} WHERE dayweek LIKE '{dayweek}%'")
+    cursor.execute(f"""SELECT * 
+                    FROM {table} 
+                    WHERE dayweek LIKE '{dayweek}%'""")
     rows = cursor.fetchall()
     
     return rows
@@ -139,7 +148,8 @@ def get_all_timetable(table: str) -> List[Tuple]:
 #Delete
 def delete_homework_homework(table: str, dayweek: str, num: str):
     """Remove lesson from timetable"""
-    cursor.execute(f"DELETE FROM '{table}' WHERE dayweek='{dayweek}' AND num='{num}'")
+    cursor.execute(f"""DELETE FROM '{table}' 
+                        WHERE dayweek='{dayweek}' AND num='{num}'""")
     rows = conn.commit()
     
     return rows   
@@ -148,14 +158,18 @@ def delete_homework_homework(table: str, dayweek: str, num: str):
 #Update
 def edit_timetable_lesson(table: str, dayweek: str, num: int, lesson: str):
     """Edits a lesson"""
-    cursor.execute(f"UPDATE '{table}' SET lesson='{lesson}' WHERE num='{num}' and dayweek='{dayweek}'")
+    cursor.execute(f"""UPDATE '{table}' 
+                        SET lesson='{lesson}' 
+                        WHERE num='{num}' and dayweek='{dayweek}'""")
     rows = conn.commit()
     
     return rows
 
 def edit_homework_homework(table: str, dayweek: str, num: int, lesson: str):
     """Edits a lesson"""
-    cursor.execute(f"UPDATE '{table}' SET homework='{homework}' WHERE num='{num}' and dayweek='{dayweek}'")
+    cursor.execute(f"""UPDATE '{table}' 
+                        SET homework='{homework}' 
+                        WHERE num='{num}' and dayweek='{dayweek}'""")
     rows = conn.commit()
     
     return rows

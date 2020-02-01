@@ -13,6 +13,11 @@ class Homework(NamedTuple):
     homework: str
     date: str
 
+class Week(NamedTuple):
+    """Структура добавленного в БД нового расхода"""
+    date_start: str
+    date_end: str
+
 def add_homework(raw_message: str):
     parse_message=list(raw_message.split())
     
@@ -30,12 +35,34 @@ def get_today_homework():
     return answer
 
 def get_tomorow_homework():
-    date 
+    date = _get_tomorow_date()
     answer = db.get_tomorow_homework("homework", date)
+    return answer
+
+def get_week_homework():
+    date = _get_week_date()
+    answer = db.get_week_homework("homework", date)
+    return answer
+
 
 def _get_today_date():
-    return datetime.datetime.today().strftime("%d-%m-%Y")
+    return datetime.datetime.today().strftime('%Y-%m-%d')
 
 def _get_tomorow_date():
-    return 
-print(get_today_homework())
+    today = datetime.date.today()
+    tomorrow = today + datetime.timedelta(days=1)
+    return tomorrow.strftime('%Y-%m-%d')
+
+def _get_week_date():
+    today = datetime.date.today()
+    days=datetime.datetime.today().weekday()
+    date_start = today - datetime.timedelta(days=days)
+    date_end = date_start + datetime.timedelta(days=6)
+    week=Week(date_start.strftime('%Y-%m-%d'), date_end.strftime('%Y-%m-%d'))
+    return week
+
+def get_timetable_dayweek(raw_message):
+    answer = db.get_timetable_dayweek("timesheet", raw_message)
+    return answer
+
+print(get_timetable_dayweek("Понедельник"))
