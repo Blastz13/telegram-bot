@@ -30,6 +30,14 @@ def add_homework(raw_message: str):
     })
     return
 
+def add_lesson(raw_message: str):
+    raw_message = list(raw_message.split())
+    answer = db.create_timetable_lesson("timesheet",{
+        "dayweek": raw_message[0],
+        "num": raw_message[1],
+        "lesson": raw_message[2]})
+    return
+
 def get_today_homework():
     date = _get_today_date()
     answer = db.get_today_homework("homework", date)
@@ -46,7 +54,14 @@ def get_week_homework():
     return answer
 
 def get_timetable_today():
-    return
+    dayweek = _get_dayweek_today()
+    answer = db.get_timetable_today("timesheet", dayweek)
+    return answer
+
+def get_timetable_tomorow():
+    dayweek = _get_dayweek_tomorow()
+    answer = db.get_timetable_tomorow("timesheet", dayweek)
+    return answer    
 
 def get_timetable_dayweek(raw_message):
     answer = db.get_timetable_dayweek("timesheet", raw_message)
@@ -56,17 +71,22 @@ def get_all_timetable():
     return db.get_all_timetable("timesheet")
 
 def delete_homework(raw_message):
-    raw_message=list(raw_message.split())
+    raw_message = list(raw_message.split())
     answer = db.delete_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
     return
 
+def delete_lesson(raw_message):
+    raw_message = list(raw_message.split())
+    answer = db.delete_lesson_timesheet("timesheet", raw_message[0], raw_message[1])
+    return
+
 def edit_timetable_lesson(raw_message):
-    raw_message=list(raw_message.split())
+    raw_message = list(raw_message.split())
     answer = db.edit_timetable_lesson("timesheet", raw_message[0], raw_message[1], raw_message[2])
     return
 
 def edit_homework(raw_message):
-    raw_message=list(raw_message.split())
+    raw_message = list(raw_message.split())
     answer = db.edit_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
     return
 
@@ -87,9 +107,15 @@ def _get_week_date():
     return week
 
 def _get_dayweek_today():
-    today = datetime.date.today()
     days=["Понедельник","Вторник","Среда","Четверг","Пятница","Суббота","Воскресенье"]
+    today = datetime.date.today()
     dayNumber=today.weekday()
     return days[dayNumber]
 
-print(_get_dayweek_today())
+def _get_dayweek_tomorow():
+    days=["Понедельник","Вторник","Среда","Четверг","Пятница","Суббота","Воскресенье"]
+    tomorow = datetime.date.today() + datetime.timedelta(days=1)
+    dayNumber=tomorow.weekday()
+    return days[dayNumber]
+
+print(get_week_homework())
