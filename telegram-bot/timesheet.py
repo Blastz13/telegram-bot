@@ -117,5 +117,3 @@ def _get_dayweek_tomorow():
     tomorow = datetime.date.today() + datetime.timedelta(days=1)
     dayNumber=tomorow.weekday()
     return days[dayNumber]
-
-print(get_week_homework())

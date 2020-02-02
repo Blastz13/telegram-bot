@@ -110,7 +110,7 @@ def get_today_homework(table: str, date: str) -> List[Tuple]:
 
 def get_tomorow_homework(table: str, date: str) -> List[Tuple]:
     # cursor.execute(f"SELECT timesheet.dayweek, timesheet.num, timesheet.lesson, homework.homework FROM timesheet LEFT OUTER JOIN homework ON homework.dayweek = timesheet.dayweek, homework.num = timesheet.num")
-    cursor.execute(f"""SELECT timesheet.dayweek , timesheet.num, timesheet.lesson , homework.homework 
+    cursor.execute(f"""SELECT timesheet.dayweek , homework.date, timesheet.num, timesheet.lesson , homework.homework 
                         FROM homework INNER JOIN timesheet 
                         ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num AND homework.lesson = timesheet.lesson
                         WHERE homework.date = '{date}'""")
@@ -118,12 +118,11 @@ def get_tomorow_homework(table: str, date: str) -> List[Tuple]:
     return rows
 
 def get_week_homework(table: str, date) -> List[Tuple]:
-    print(date)
     # cursor.execute(f"SELECT timesheet.dayweek, timesheet.num, timesheet.lesson, homework.homework FROM timesheet LEFT OUTER JOIN homework ON homework.dayweek = timesheet.dayweek, homework.num = timesheet.num")
     cursor.execute(f"""SELECT timesheet.dayweek, homework.date, timesheet.num, timesheet.lesson , homework.homework 
-                        FROM homework INNER JOIN timesheet 
+                        FROM homework INNER JOIN timesheet
                         ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num AND homework.lesson = timesheet.lesson
-                        WHERE date BETWEEN '{date.date_start}' AND '{date.date_end}'""")
+                        WHERE date BETWEEN '{date.date_start}' AND '{date.date_end}' ORDER BY homework.date""")
     rows = cursor.fetchall()
     return rows
 
