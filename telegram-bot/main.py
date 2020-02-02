@@ -8,6 +8,8 @@ import expenses
 from course import course_json
 from weath import weather
 from categories import Categories
+import output
+import timesheet
 
 import config
 
@@ -169,6 +171,17 @@ def start_message(message):
 
 		bot.send_message(message.from_user.id, "Меню Бота:",reply_markup=user_markup)
 
+	# if message.text == "Сегодня":
+	# 	"""Добавляет новый расход"""
+	# 	try:
+	# 		answ=message.text
+	# 		print(answ)
+	# 		homework = timesheet.get_today_homework()
+	# 		answer_message = output.normalize(homework)
+	# 		bot.send_message(message.from_user.id, answer_message)
+	# 	except:
+	# 		bot.send_message(message.from_user.id,"Вы ввели неверную команду")
+		
 # @bot.message_handler(commands=['help'])
 # def start_message(message):
 # 	keyboard1 = telebot.types.ReplyKeyboardMarkup(True,True)

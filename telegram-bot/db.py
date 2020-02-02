@@ -162,7 +162,7 @@ def get_all_timetable(table: str) -> List[Tuple]:
                                                               dayweek ='Четверг'  DESC,
                                                               dayweek ='Пятница'    DESC,
                                                               dayweek ='Суббота'  DESC,
-                                                              dayweek ='Воскресенье'    DESC""")
+                                                              dayweek ='Воскресенье' DESC""")
     rows = cursor.fetchall()
     
     return rows
