@@ -127,6 +127,15 @@ def get_week_homework(table: str, date) -> List[Tuple]:
     rows = cursor.fetchall()
     return rows
 
+def get_timetable_today(table: str, dayweek: str) -> List[Tuple]:
+    """Displays the schedule for the day of the week"""
+    cursor.execute(f"""SELECT * 
+                    FROM {table} 
+                    WHERE dayweek LIKE '{dayweek}%'""")
+    rows = cursor.fetchall()
+    
+    return rows
+
 def get_timetable_dayweek(table: str, dayweek: str) -> List[Tuple]:
     """Displays the schedule for the day of the week"""
     columns_joined = ", ".join(dayweek)
