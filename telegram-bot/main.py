@@ -16,12 +16,25 @@ import config
 apihelper.proxy = config.PROXY
 bot = telebot.TeleBot(token=config.TOKEN)
 
+user_markup_menu_timesheet = telebot.types.ReplyKeyboardMarkup(True, True)
+user_markup_menu_timesheet.row("/homework")
+user_markup_menu_timesheet.row("/schedule")
+user_markup_menu_timesheet.row("Меню")
+
+user_do_menu = telebot.types.ReplyKeyboardMarkup(True, True)
+user_do_menu.row("/today")
+user_do_menu.row("/tomorow")
+user_do_menu.row("/week")
+user_do_menu.row("/add")
+user_do_menu.row("/edit")
+user_do_menu.row("/delete")
+user_do_menu.row("Меню")
 
 @bot.message_handler(commands=['start', 'help'])
 def start_message(message):
 	"""Отправляет приветственное сообщение и помощь по боту"""
-
 	user_markup = telebot.types.ReplyKeyboardMarkup(True, True)
+	user_markup.row("/timesheet")
 	user_markup.row("/finance")
 	user_markup.row("/course")
 	user_markup.row("/weather")
@@ -35,6 +48,66 @@ def start_message(message):
 	"Последние расходы: /expenses\n"
     "Категории трат: /categories",reply_markup=user_markup)
 
+@bot.message_handler(commands=['timesheet'])
+def start_message(message):
+	"""Ввывод меню бота для финансов"""
+	bot.send_message(message.from_user.id,"Команды Расписания:",reply_markup=user_markup_menu_timesheet)
+
+@bot.message_handler(commands=['homework'])
+def start_message(message):
+	"""Ввывод меню бота для финансов"""
+	msg = bot.send_message(message.chat.id, "-------------------:",reply_markup=user_do_menu)
+	bot.register_next_step_handler(msg, process_command_step_homework)
+
+def process_command_step_homework(message):
+	if message.text == "/today":
+		try:
+			answer = timesheet.get_today_homework()
+			bot.send_message(message.from_user.id, output.one_day_homework(answer),reply_markup=user_markup_menu_timesheet)
+		except:
+			bot.send_message(message.from_user.id, "Домашнего задания нету",reply_markup=user_markup_menu_timesheet)
+	
+	elif message.text == "/tomorow":
+		try:
+			answer = timesheet.get_tomorow_homework()
+			bot.send_message(message.from_user.id, output.one_day_homework(answer),reply_markup=user_markup_menu_timesheet)
+		except:
+			bot.send_message(message.from_user.id, "Домашнего задания нету",reply_markup=user_markup_menu_timesheet)
+	
+	elif message.text == "/week":	
+		try:
+			answer = timesheet.get_week_homework()
+			bot.send_message(message.from_user.id, output.week_homework(answer),reply_markup=user_markup_menu_timesheet)
+		except:
+			bot.send_message(message.from_user.id, "Домашнего задания нету",reply_markup=user_markup_menu_timesheet)
+
+@bot.message_handler(commands=['schedule'])
+def start_message(message):
+	"""Ввывод меню бота для финансов"""
+	msg = bot.send_message(message.chat.id, "-------------------:",reply_markup=user_do_menu)
+	bot.register_next_step_handler(msg, process_command_step_schedule)
+
+def process_command_step_schedule(message):
+	if message.text == "/today":
+		try:
+			answer = timesheet.get_timetable_today()
+			bot.send_message(message.from_user.id, output.one_day_timetable(answer),reply_markup=user_markup_menu_timesheet)
+		except:
+			bot.send_message(message.from_user.id, "Расписание отсутствует",reply_markup=user_markup_menu_timesheet)
+	
+	elif message.text == "/tomorow":
+		try:
+			answer = timesheet.get_timetable_tomorow()
+			bot.send_message(message.from_user.id, output.one_day_timetable(answer),reply_markup=user_markup_menu_timesheet)
+		except:
+			bot.send_message(message.from_user.id, "Расписание отсутствует",reply_markup=user_markup_menu_timesheet)
+	
+	elif message.text == "/week":	
+		try:
+			answer = timesheet.get_all_timetable()
+			bot.send_message(message.from_user.id, output.week_homework(answer),reply_markup=user_markup_menu_timesheet)
+		except:
+			bot.send_message(message.from_user.id, "Расписание отсутствует",reply_markup=user_markup_menu_timesheet)
 
 @bot.message_handler(commands=['finance'])
 def start_message(message):
@@ -47,7 +120,6 @@ def start_message(message):
 	user_markup2.row("Меню")
 	
 	bot.send_message(message.from_user.id,"Функции Бота для Финансов:",reply_markup=user_markup2)
-
 
 @bot.message_handler(commands=['expenses'])
 def list_expenses(message):
@@ -165,6 +237,7 @@ def start_message(message):
 	"""Обработчик меню"""
 	if message.text == "Меню":
 		user_markup = telebot.types.ReplyKeyboardMarkup(True, True)
+		user_markup.row("/timesheet")
 		user_markup.row("/finance")
 		user_markup.row("/course")
 		user_markup.row("/weather")
