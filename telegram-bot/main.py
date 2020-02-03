@@ -105,7 +105,7 @@ def process_command_step_schedule(message):
 	elif message.text == "/week":	
 		try:
 			answer = timesheet.get_all_timetable()
-			bot.send_message(message.from_user.id, output.week_homework(answer),reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, output.week_timetable(answer),reply_markup=user_markup_menu_timesheet)
 		except:
 			bot.send_message(message.from_user.id, "Расписание отсутствует",reply_markup=user_markup_menu_timesheet)
 
@@ -180,7 +180,7 @@ def start_message(message):
 	user_markup2 = telebot.types.ReplyKeyboardMarkup(True, True)
 	user_markup2.row("USD")
 	user_markup2.row("EUR")
-	user_markup2.row("RUB")
+	user_markup2.row("RUR")
 	user_markup2.row("UAH")
 	msg = bot.send_message(message.chat.id, "Введите валюту или выберите из списка:",reply_markup=user_markup2)
 	bot.register_next_step_handler(msg, process_coin_step)
@@ -202,6 +202,7 @@ def start_message(message):
 	"""Функция для ввывода погоды"""
 	user_markup3 = telebot.types.ReplyKeyboardMarkup(True, True)
 	user_markup3.row("Рузаевка")
+	user_markup3.row("Саранск")
 	user_markup3.row("Москва")
 	user_markup3.row("Санкт-Петербург")
 	msg = bot.send_message(message.chat.id, "Введите город или выберите из списка:",reply_markup=user_markup3)
