@@ -31,11 +31,11 @@ def add_homework(raw_message: str):
     return
 
 def add_lesson(raw_message: str):
-    raw_message = list(raw_message.split())
+    raw_message = list(raw_message.text.split())
     answer = db.create_timetable_lesson("timesheet",{
-        "dayweek": raw_message[0],
+        "dayweek": raw_message[0].capitalize(),
         "num": raw_message[1],
-        "lesson": raw_message[2]})
+        "lesson": raw_message[2].capitalize()})
     return
 
 def get_today_homework():

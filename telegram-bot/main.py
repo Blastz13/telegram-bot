@@ -108,6 +108,19 @@ def process_command_step_schedule(message):
 			bot.send_message(message.from_user.id, output.week_timetable(answer),reply_markup=user_markup_menu_timesheet)
 		except:
 			bot.send_message(message.from_user.id, "Расписание отсутствует",reply_markup=user_markup_menu_timesheet)
+	elif message.text == "/add":	
+		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Название предмета}",reply_markup=user_markup_menu_timesheet)
+		bot.register_next_step_handler(msg, add_schedule)
+
+
+def add_schedule(message):
+	try:
+		answer = timesheet.add_lesson(message)
+	except:
+		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		return
+	bot.send_message(message.chat.id, "Добавлено",reply_markup=user_markup_menu_timesheet)
+	return
 
 @bot.message_handler(commands=['finance'])
 def start_message(message):
