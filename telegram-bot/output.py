@@ -36,7 +36,7 @@ def one_day_timetable(homework):
             continue
         row+=f"{homework[i][1]}. {homework[i][2]}\n"
     return(row)
-
+# !!!!!!
 def week_timetable(homework):
     for i in range(0, len(homework)):
         if i == 0:

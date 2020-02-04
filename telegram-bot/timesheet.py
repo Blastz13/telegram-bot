@@ -18,15 +18,14 @@ class Week(NamedTuple):
     date_start: str
     date_end: str
 
-def add_homework(raw_message: str):
-    parse_message=list(raw_message.split())
+def add_homework(parse_message):
     
     inserted_row = db.create_homework("homework", {
         "dayweek": parse_message[0],
         "num": parse_message[1],
         "lesson": parse_message[2],
-        "homework": parse_message[3],
-        "date": parse_message[4]
+        "homework": parse_message[4],
+        "date": parse_message[3]
     })
     return
 

@@ -101,7 +101,26 @@ def process_command_step_homework(message):
 		bot.register_next_step_handler(msg, delete_homework)
 
 def add_homework(message):
-	
+	try:
+		answer = list(message.text.split())
+		msg = bot.send_message(message.chat.id, "Введите домашнее задание :",reply_markup=user_markup_menu_timesheet)
+		bot.register_next_step_handler(msg, add_homework_hm, answer)
+	except:
+		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		return
+	return
+
+def add_homework_hm(message, answer):
+	try:
+		response = message.text
+		answer.append(response)
+		response = timesheet.add_homework(answer)
+	except:
+		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		return
+	bot.send_message(message.chat.id, "Добавлено",reply_markup=user_markup_menu_timesheet)
+	return
+
 def edit_homework(message):
 	try:
 		answer = list(message.text.split())
@@ -314,7 +333,6 @@ def process_weather_step(message):
 @bot.message_handler(regexp="^[0-9]{1,}")
 def add_expense(message):
 	"""Добавляет новый расход"""
-	print("qqwq")
 	try:
 		answ=message.text
 		expense = expenses.add_expense(answ)
@@ -336,56 +354,6 @@ def start_message(message):
 		user_markup.row("/weather")
 
 		bot.send_message(message.from_user.id, "Меню Бота:",reply_markup=user_markup)
-
-	# if message.text == "Сегодня":
-	# 	"""Добавляет новый расход"""
-	# 	try:
-	# 		answ=message.text
-	# 		print(answ)
-	# 		homework = timesheet.get_today_homework()
-	# 		answer_message = output.normalize(homework)
-	# 		bot.send_message(message.from_user.id, answer_message)
-	# 	except:
-	# 		bot.send_message(message.from_user.id,"Вы ввели неверную команду")
-		
-# @bot.message_handler(commands=['help'])
-# def start_message(message):
-# 	keyboard1 = telebot.types.ReplyKeyboardMarkup(True,True)
-# 	keyboard1.row('/start')
-# 	bot.send_message(message.chat.id,"Вот список моих команд:\n/start - запуск бота\n/course - Курс валют\n/weather - Погода\n/help - помощь",reply_markup=keyboard1)
-
-# @bot.message_handler(commands=['course'])
-# def start_message(message):
-# 	user_markup2 = telebot.types.ReplyKeyboardMarkup(True, True)
-# 	user_markup2.row("USD")
-# 	user_markup2.row("EUR")
-# 	msg = bot.send_message(message.chat.id, "Введите валюту:",reply_markup=user_markup2)
-# 	bot.register_next_step_handler(msg, process_coin_step)
-
-# def process_coin_step(message):
-# 	try:
-# 		menu_remove=types.ReplyKeyboardRemove()
-# 		bot.send_message(message.chat.id, course_json(message.text),reply_markup=menu_remove)
-
-# 	except Exception as e:
-# 		bot.reply_to(message, 'ooops!')
-
-
-# @bot.message_handler(commands=['weather'])
-# def start_message(message):
-# 	user_markup3 = telebot.types.ReplyKeyboardMarkup(True, True)
-# 	user_markup3.row("Рузаевка")
-# 	user_markup3.row("Москва")
-# 	msg = bot.send_message(message.chat.id, "Введите город:",reply_markup=user_markup3)
-# 	bot.register_next_step_handler(msg, process_weather_step)
-
-# def process_weather_step(message):
-# 	try:
-# 		menu_remove=types.ReplyKeyboardRemove()
-# 		bot.send_message(message.chat.id, weather(message.text),reply_markup=menu_remove)
-
-# 	except Exception as e:
-# 		bot.reply_to(message, 'ooops2!')
 
 
 if __name__ == '__main__':
