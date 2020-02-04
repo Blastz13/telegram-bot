@@ -80,6 +80,27 @@ def process_command_step_homework(message):
 			bot.send_message(message.from_user.id, output.week_homework(answer),reply_markup=user_markup_menu_timesheet)
 		except:
 			bot.send_message(message.from_user.id, "Домашнего задания нету",reply_markup=user_markup_menu_timesheet)
+	
+	elif message.text == "/add":	
+		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Название предмета}",reply_markup=user_markup_menu_timesheet)
+		# bot.register_next_step_handler(msg, )
+
+	elif message.text == "/edit":	
+		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Новое }",reply_markup=user_markup_menu_timesheet)
+		# bot.register_next_step_handler(msg, )
+
+	elif message.text == "/delete":	
+		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Дату в формате Y-m-d}",reply_markup=user_markup_menu_timesheet)
+		bot.register_next_step_handler(msg, delete_homework)
+
+def delete_homework(message):
+	try:
+		answer = timesheet.delete_homework(message)
+	except:
+		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		return
+	bot.send_message(message.chat.id, "Удалено",reply_markup=user_markup_menu_timesheet)
+	return
 
 @bot.message_handler(commands=['schedule'])
 def start_message(message):
@@ -112,7 +133,15 @@ def process_command_step_schedule(message):
 		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Название предмета}",reply_markup=user_markup_menu_timesheet)
 		bot.register_next_step_handler(msg, add_schedule)
 
+	elif message.text == "/edit":	
+		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Название предмета на которое хотите изменить}",reply_markup=user_markup_menu_timesheet)
+		bot.register_next_step_handler(msg, edit_schedule)
 
+	elif message.text == "/delete":	
+		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока}",reply_markup=user_markup_menu_timesheet)
+		bot.register_next_step_handler(msg, delete_schedule)
+
+	
 def add_schedule(message):
 	try:
 		answer = timesheet.add_lesson(message)
@@ -120,6 +149,24 @@ def add_schedule(message):
 		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
 		return
 	bot.send_message(message.chat.id, "Добавлено",reply_markup=user_markup_menu_timesheet)
+	return
+
+def edit_schedule(message):
+	try:
+		answer = timesheet.edit_timetable_lesson(message)
+	except:
+		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		return
+	bot.send_message(message.chat.id, "Изменено",reply_markup=user_markup_menu_timesheet)
+	return
+
+def delete_schedule(message):
+	try:
+		answer = timesheet.delete_lesson(message)
+	except:
+		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		return
+	bot.send_message(message.chat.id, "Удалено",reply_markup=user_markup_menu_timesheet)
 	return
 
 @bot.message_handler(commands=['finance'])

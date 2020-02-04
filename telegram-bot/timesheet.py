@@ -71,22 +71,22 @@ def get_all_timetable():
     return db.get_all_timetable("timesheet")
 
 def delete_homework(raw_message):
-    raw_message = list(raw_message.split())
+    raw_message = list(raw_message.text.split())
     answer = db.delete_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
     return
 
 def delete_lesson(raw_message):
-    raw_message = list(raw_message.split())
+    raw_message = list(raw_message.text.split())
     answer = db.delete_lesson_timesheet("timesheet", raw_message[0], raw_message[1])
     return
 
 def edit_timetable_lesson(raw_message):
-    raw_message = list(raw_message.split())
+    raw_message = list(raw_message.text.split())
     answer = db.edit_timetable_lesson("timesheet", raw_message[0], raw_message[1], raw_message[2])
     return
 
 def edit_homework(raw_message):
-    raw_message = list(raw_message.split())
+    raw_message = list(raw_message.text.split())
     answer = db.edit_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
     return
 
