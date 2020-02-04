@@ -85,9 +85,8 @@ def edit_timetable_lesson(raw_message):
     answer = db.edit_timetable_lesson("timesheet", raw_message[0], raw_message[1], raw_message[2])
     return
 
-def edit_homework(raw_message):
-    raw_message = list(raw_message.text.split())
-    answer = db.edit_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
+def edit_homework(*answer):
+    answer = db.edit_homework_homework("homework", *answer)
     return
 
 def _get_today_date():

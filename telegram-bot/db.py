@@ -196,11 +196,11 @@ def edit_timetable_lesson(table: str, dayweek: str, num: int, lesson: str):
     
     return rows
 
-def edit_homework_homework(table: str, dayweek: str, num: int, homework: str):
+def edit_homework_homework(table: str, *answer):
     """Edits a homework"""
     cursor.execute(f"""UPDATE '{table}' 
-                        SET homework='{homework}' 
-                        WHERE num='{num}' and dayweek='{dayweek}'""")
+                        SET homework='{answer[0][3]}' 
+                        WHERE num='{answer[0][1]}' and dayweek='{answer[0][0]}' and date='{answer[0][2]}'""")
     rows = conn.commit()
     
     return rows

@@ -30,6 +30,13 @@ user_do_menu.row("/edit")
 user_do_menu.row("/delete")
 user_do_menu.row("Меню")
 
+class Homework():
+    dayweek = ""
+    num = 1
+    homework = "" 
+    date = ""
+
+
 @bot.message_handler(commands=['start', 'help'])
 def start_message(message):
 	"""Отправляет приветственное сообщение и помощь по боту"""
@@ -82,16 +89,40 @@ def process_command_step_homework(message):
 			bot.send_message(message.from_user.id, "Домашнего задания нету",reply_markup=user_markup_menu_timesheet)
 	
 	elif message.text == "/add":	
-		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Название предмета}",reply_markup=user_markup_menu_timesheet)
-		# bot.register_next_step_handler(msg, )
+		msg = bot.send_message(message.chat.id, "Введите данные в формате:\n{День недели} {Номер урока} {Название предмета} {Дату в формате Y-m-d}",reply_markup=user_markup_menu_timesheet)
+		bot.register_next_step_handler(msg, add_homework)
 
 	elif message.text == "/edit":	
-		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Новое }",reply_markup=user_markup_menu_timesheet)
-		# bot.register_next_step_handler(msg, )
+		msg = bot.send_message(message.chat.id, "Введите данные в формате:\n{День недели} {Номер урока} {Дату в формате Y-m-d}",reply_markup=user_markup_menu_timesheet)
+		bot.register_next_step_handler(msg, edit_homework)
 
 	elif message.text == "/delete":	
-		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Дату в формате Y-m-d}",reply_markup=user_markup_menu_timesheet)
+		msg = bot.send_message(message.chat.id, "Введите данные в формате:\n{День недели} {Номер урока} {Дату в формате Y-m-d}",reply_markup=user_markup_menu_timesheet)
 		bot.register_next_step_handler(msg, delete_homework)
+
+def add_homework(message):
+	
+def edit_homework(message):
+	try:
+		answer = list(message.text.split())
+		msg = bot.send_message(message.chat.id, "Введите домашнее задание :",reply_markup=user_markup_menu_timesheet)
+		bot.register_next_step_handler(msg, edit_homework_hm, answer)
+	except:
+		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		return
+	return
+
+def edit_homework_hm(message, answer):
+	try:
+		response = message.text
+		answer.append(response)
+		response = timesheet.edit_homework(answer)
+	except:
+		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		return
+	bot.send_message(message.chat.id, "Изменено",reply_markup=user_markup_menu_timesheet)
+	return
+
 
 def delete_homework(message):
 	try:
@@ -280,15 +311,16 @@ def process_weather_step(message):
 		bot.reply_to(message, 'ooops2!')
 
 
-@bot.message_handler(regexp="[0-9]{1,}")
+@bot.message_handler(regexp="^[0-9]{1,}")
 def add_expense(message):
 	"""Добавляет новый расход"""
+	print("qqwq")
 	try:
 		answ=message.text
 		expense = expenses.add_expense(answ)
 	except:
 		bot.send_message(message.from_user.id,"Вы ввели неверную команду")
-	
+		return
 	answer_message ="Добавлены траты {} руб на {}\n\n".format(expense.amount,expense.category_name)
 	bot.send_message(message.from_user.id, answer_message)
 
