@@ -30,11 +30,6 @@ user_do_menu.row("/edit")
 user_do_menu.row("/delete")
 user_do_menu.row("Меню")
 
-class Homework():
-    dayweek = ""
-    num = 1
-    homework = "" 
-    date = ""
 
 
 @bot.message_handler(commands=['start', 'help'])
@@ -57,12 +52,12 @@ def start_message(message):
 
 @bot.message_handler(commands=['timesheet'])
 def start_message(message):
-	"""Ввывод меню бота для финансов"""
+	"""Ввывод меню бота для расписания"""
 	bot.send_message(message.from_user.id,"Команды Расписания:",reply_markup=user_markup_menu_timesheet)
 
 @bot.message_handler(commands=['homework'])
 def start_message(message):
-	"""Ввывод меню бота для финансов"""
+	"""Ввывод команд для дз"""
 	msg = bot.send_message(message.chat.id, "-------------------:",reply_markup=user_do_menu)
 	bot.register_next_step_handler(msg, process_command_step_homework)
 
@@ -70,23 +65,35 @@ def process_command_step_homework(message):
 	if message.text == "/today":
 		try:
 			answer = timesheet.get_today_homework()
-			bot.send_message(message.from_user.id, output.one_day_homework(answer),reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							output.one_day_homework(answer),
+							reply_markup=user_markup_menu_timesheet)
 		except:
-			bot.send_message(message.from_user.id, "Домашнего задания нету",reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							"Домашнего задания нету",
+							reply_markup=user_markup_menu_timesheet)
 	
 	elif message.text == "/tomorow":
 		try:
 			answer = timesheet.get_tomorow_homework()
-			bot.send_message(message.from_user.id, output.one_day_homework(answer),reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							output.one_day_homework(answer),
+							reply_markup=user_markup_menu_timesheet)
 		except:
-			bot.send_message(message.from_user.id, "Домашнего задания нету",reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							"Домашнего задания нету",
+							reply_markup=user_markup_menu_timesheet)
 	
 	elif message.text == "/week":	
 		try:
 			answer = timesheet.get_week_homework()
-			bot.send_message(message.from_user.id, output.week_homework(answer),reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							output.week_homework(answer),
+							reply_markup=user_markup_menu_timesheet)
 		except:
-			bot.send_message(message.from_user.id, "Домашнего задания нету",reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							"Домашнего задания нету",
+							reply_markup=user_markup_menu_timesheet)
 	
 	elif message.text == "/add":	
 		msg = bot.send_message(message.chat.id, "Введите данные в формате:\n{День недели} {Номер урока} {Название предмета} {Дату в формате Y-m-d}",reply_markup=user_markup_menu_timesheet)
@@ -103,10 +110,12 @@ def process_command_step_homework(message):
 def add_homework(message):
 	try:
 		answer = list(message.text.split())
-		msg = bot.send_message(message.chat.id, "Введите домашнее задание :",reply_markup=user_markup_menu_timesheet)
+		msg = bot.send_message(message.chat.id,
+							 "Введите домашнее задание :",
+							 reply_markup=user_markup_menu_timesheet)
 		bot.register_next_step_handler(msg, add_homework_hm, answer)
 	except:
-		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		bot.send_message(message.chat.id, "Ошибка", reply_markup=user_markup_menu_timesheet)
 		return
 	return
 
@@ -116,18 +125,18 @@ def add_homework_hm(message, answer):
 		answer.append(response)
 		response = timesheet.add_homework(answer)
 	except:
-		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		bot.send_message(message.chat.id, "Ошибка", reply_markup=user_markup_menu_timesheet)
 		return
-	bot.send_message(message.chat.id, "Добавлено",reply_markup=user_markup_menu_timesheet)
+	bot.send_message(message.chat.id, "Добавлено", reply_markup=user_markup_menu_timesheet)
 	return
 
 def edit_homework(message):
 	try:
 		answer = list(message.text.split())
-		msg = bot.send_message(message.chat.id, "Введите домашнее задание :",reply_markup=user_markup_menu_timesheet)
+		msg = bot.send_message(message.chat.id, "Введите домашнее задание :", reply_markup=user_markup_menu_timesheet)
 		bot.register_next_step_handler(msg, edit_homework_hm, answer)
 	except:
-		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		bot.send_message(message.chat.id, "Ошибка", reply_markup=user_markup_menu_timesheet)
 		return
 	return
 
@@ -137,9 +146,9 @@ def edit_homework_hm(message, answer):
 		answer.append(response)
 		response = timesheet.edit_homework(answer)
 	except:
-		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		bot.send_message(message.chat.id, "Ошибка", reply_markup=user_markup_menu_timesheet)
 		return
-	bot.send_message(message.chat.id, "Изменено",reply_markup=user_markup_menu_timesheet)
+	bot.send_message(message.chat.id, "Изменено", reply_markup=user_markup_menu_timesheet)
 	return
 
 
@@ -147,38 +156,50 @@ def delete_homework(message):
 	try:
 		answer = timesheet.delete_homework(message)
 	except:
-		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		bot.send_message(message.chat.id, "Ошибка", reply_markup=user_markup_menu_timesheet)
 		return
-	bot.send_message(message.chat.id, "Удалено",reply_markup=user_markup_menu_timesheet)
+	bot.send_message(message.chat.id, "Удалено", reply_markup=user_markup_menu_timesheet)
 	return
 
 @bot.message_handler(commands=['schedule'])
 def start_message(message):
-	"""Ввывод меню бота для финансов"""
-	msg = bot.send_message(message.chat.id, "-------------------:",reply_markup=user_do_menu)
+	"""Ввывод команд для расписания"""
+	msg = bot.send_message(message.chat.id, "-------------------:", reply_markup=user_do_menu)
 	bot.register_next_step_handler(msg, process_command_step_schedule)
 
 def process_command_step_schedule(message):
 	if message.text == "/today":
 		try:
 			answer = timesheet.get_timetable_today()
-			bot.send_message(message.from_user.id, output.one_day_timetable(answer),reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							output.one_day_timetable(answer), 
+							reply_markup=user_markup_menu_timesheet)
 		except:
-			bot.send_message(message.from_user.id, "Расписание отсутствует",reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							"Расписание отсутствует", 
+							reply_markup=user_markup_menu_timesheet)
 	
 	elif message.text == "/tomorow":
 		try:
 			answer = timesheet.get_timetable_tomorow()
-			bot.send_message(message.from_user.id, output.one_day_timetable(answer),reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							output.one_day_timetable(answer), 
+							reply_markup=user_markup_menu_timesheet)
 		except:
-			bot.send_message(message.from_user.id, "Расписание отсутствует",reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id,
+							"Расписание отсутствует", 
+							reply_markup=user_markup_menu_timesheet)
 	
 	elif message.text == "/week":	
 		try:
 			answer = timesheet.get_all_timetable()
-			bot.send_message(message.from_user.id, output.week_timetable(answer),reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							output.week_timetable(answer), 
+							reply_markup=user_markup_menu_timesheet)
 		except:
-			bot.send_message(message.from_user.id, "Расписание отсутствует",reply_markup=user_markup_menu_timesheet)
+			bot.send_message(message.from_user.id, 
+							"Расписание отсутствует", 
+							reply_markup=user_markup_menu_timesheet)
 	elif message.text == "/add":	
 		msg = bot.send_message(message.chat.id, "Введитие данные в формате:\n{День недели} {Номер урока} {Название предмета}",reply_markup=user_markup_menu_timesheet)
 		bot.register_next_step_handler(msg, add_schedule)
@@ -196,7 +217,9 @@ def add_schedule(message):
 	try:
 		answer = timesheet.add_lesson(message)
 	except:
-		bot.send_message(message.chat.id, "Ошибка",reply_markup=user_markup_menu_timesheet)
+		bot.send_message(message.chat.id, 
+						"Ошибка",
+						reply_markup=user_markup_menu_timesheet)
 		return
 	bot.send_message(message.chat.id, "Добавлено",reply_markup=user_markup_menu_timesheet)
 	return
@@ -315,7 +338,9 @@ def start_message(message):
 	user_markup3.row("Саранск")
 	user_markup3.row("Москва")
 	user_markup3.row("Санкт-Петербург")
-	msg = bot.send_message(message.chat.id, "Введите город или выберите из списка:",reply_markup=user_markup3)
+	msg = bot.send_message(message.chat.id, 
+						"Введите город или выберите из списка:",
+						reply_markup=user_markup3)
 	bot.register_next_step_handler(msg, process_weather_step)
 
 def process_weather_step(message):

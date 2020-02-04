@@ -7,14 +7,14 @@ import pytz
 import db
 
 class Homework(NamedTuple):
-    """Структура добавленного в БД нового расхода"""
+    """Структура добавленного в БД """
     dayweek: str
     lesson: str
     homework: str
     date: str
 
 class Week(NamedTuple):
-    """Структура добавленного в БД нового расхода"""
+    """Структура добавленного в БД """
     date_start: str
     date_end: str
 

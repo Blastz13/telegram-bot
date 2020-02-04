@@ -60,19 +60,11 @@ def check_db_exists():
         return
     _init_db()
 
-check_db_exists()
-# # insert("lessons", {"dayweek":"Вторник","lesson":"Химия","homework":"Параграф 3"})
 
-# def fetch_timetable_dayweek(table: str, columns: str) -> List[Tuple]:
-#     """Вisplays the schedule for the day of the week"""
-#     columns_joined = ", ".join(columns)
-#     cursor.execute(f"SELECT * FROM {table} WHERE dayweek LIKE '{columns}%'")
-#     rows = cursor.fetchall()
-    
-#     return rows
 
 #CRUD
 def create_homework(table: str, column_values: Dict):
+    """Add homework"""
     columns = ', '.join( column_values.keys() )
     values = [tuple(column_values.values())]
     placeholders = ", ".join( "?" * len(column_values.keys()) )
@@ -95,21 +87,17 @@ def create_timetable_lesson(table: str, column_values: Dict):
         values)
     conn.commit()
 
-# insert_homework ("homework", {"dayweek":"Пятница","lesson":"Астрономия","homework":"Параграф 1","num":2,"date":"07-02-2020"})
-
 def get_today_homework(table: str, date: str) -> List[Tuple]:
-    # cursor.execute(f"SELECT timesheet.dayweek, timesheet.num, timesheet.lesson, homework.homework FROM timesheet LEFT OUTER JOIN homework ON homework.dayweek = timesheet.dayweek, homework.num = timesheet.num")
+    """Return today homework"""
     cursor.execute(f"""SELECT timesheet.dayweek, homework.date, timesheet.num, timesheet.lesson , homework.homework 
                         FROM homework INNER JOIN timesheet 
                         ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num AND homework.lesson = timesheet.lesson
                         WHERE homework.date = '{date}'""")
     rows = cursor.fetchall()
     return rows
-# print(get_today_homework("homework","04-02-2020"))
-# create_timetable_lesson("homework", {"dayweek":"Вторник","lesson":"Химия","homework":"Параграф 3","num":1,"date":"04-02-2020"})
 
 def get_tomorow_homework(table: str, date: str) -> List[Tuple]:
-    # cursor.execute(f"SELECT timesheet.dayweek, timesheet.num, timesheet.lesson, homework.homework FROM timesheet LEFT OUTER JOIN homework ON homework.dayweek = timesheet.dayweek, homework.num = timesheet.num")
+    """Return tomorow homework"""
     cursor.execute(f"""SELECT timesheet.dayweek , homework.date, timesheet.num, timesheet.lesson , homework.homework 
                         FROM homework INNER JOIN timesheet 
                         ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num AND homework.lesson = timesheet.lesson
@@ -118,7 +106,7 @@ def get_tomorow_homework(table: str, date: str) -> List[Tuple]:
     return rows
 
 def get_week_homework(table: str, date) -> List[Tuple]:
-    # cursor.execute(f"SELECT timesheet.dayweek, timesheet.num, timesheet.lesson, homework.homework FROM timesheet LEFT OUTER JOIN homework ON homework.dayweek = timesheet.dayweek, homework.num = timesheet.num")
+    """Return week homework"""
     cursor.execute(f"""SELECT timesheet.dayweek, homework.date, timesheet.num, timesheet.lesson , homework.homework 
                         FROM homework INNER JOIN timesheet
                         ON homework.dayweek = timesheet.dayweek AND homework.num = timesheet.num AND homework.lesson = timesheet.lesson
@@ -127,7 +115,7 @@ def get_week_homework(table: str, date) -> List[Tuple]:
     return rows
 
 def get_timetable_today(table: str, dayweek: str) -> List[Tuple]:
-    """Displays the schedule for the day of the week"""
+    """Displays the schedule for the day of the today"""
     cursor.execute(f"""SELECT * 
                     FROM {table} 
                     WHERE dayweek LIKE '{dayweek}%'""")
@@ -136,7 +124,7 @@ def get_timetable_today(table: str, dayweek: str) -> List[Tuple]:
     return rows
 
 def get_timetable_tomorow(table: str, dayweek: str) -> List[Tuple]:
-    """Displays the schedule for the day of the week"""
+    """Displays the schedule for the day of the tomorow"""
     cursor.execute(f"""SELECT * 
                     FROM {table} 
                     WHERE dayweek LIKE '{dayweek}%'""")
@@ -170,9 +158,11 @@ def get_all_timetable(table: str) -> List[Tuple]:
 
 #Delete
 def delete_homework_homework(table: str, dayweek: str, num: str, date: str):
-    """Remove lesson from timetable"""
+    """Remove homework from timetable"""
     cursor.execute(f"""DELETE FROM '{table}' 
-                        WHERE dayweek='{dayweek}' AND num='{num}' AND date='{date}'""")
+                        WHERE dayweek='{dayweek}' 
+                        AND num='{num}' 
+                        AND date='{date}'""")
     rows = conn.commit()
     
     return rows
@@ -180,7 +170,8 @@ def delete_homework_homework(table: str, dayweek: str, num: str, date: str):
 def delete_lesson_timesheet(table: str, dayweek: str, num: str):
     """Remove lesson from timetable"""
     cursor.execute(f"""DELETE FROM '{table}' 
-                        WHERE dayweek='{dayweek}' AND num='{num}'""")
+                        WHERE dayweek='{dayweek}' 
+                        AND num='{num}'""")
     rows = conn.commit()
     
     return rows  
@@ -191,7 +182,8 @@ def edit_timetable_lesson(table: str, dayweek: str, num: int, lesson: str):
     """Edits a lesson"""
     cursor.execute(f"""UPDATE '{table}' 
                         SET lesson='{lesson}' 
-                        WHERE num='{num}' and dayweek='{dayweek}'""")
+                        WHERE num='{num}' 
+                        AND dayweek='{dayweek}'""")
     rows = conn.commit()
     
     return rows
@@ -200,9 +192,11 @@ def edit_homework_homework(table: str, *answer):
     """Edits a homework"""
     cursor.execute(f"""UPDATE '{table}' 
                         SET homework='{answer[0][3]}' 
-                        WHERE num='{answer[0][1]}' and dayweek='{answer[0][0]}' and date='{answer[0][2]}'""")
+                        WHERE num='{answer[0][1]}' 
+                        AND dayweek='{answer[0][0]}' 
+                        AND date='{answer[0][2]}'""")
     rows = conn.commit()
     
     return rows
 
-# print(edit_timetable_lesson("timesheet","Вторник",1,"Физкультура"))
+check_db_exists()
