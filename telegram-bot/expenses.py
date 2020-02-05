@@ -49,7 +49,7 @@ def get_today_statistics() -> str:
     if not result[0]:
         return "Сегодня ещё нет расходов"
     all_today_expenses = result[0]
-    cursor.execute("select sum(amount) "
+    cursor.execute("select sum('amount') "
                    "from expense where date(created)=date('now', 'localtime') "
                    "and category_codename in (select codename "
                    "from category where is_base_expense=true)")
