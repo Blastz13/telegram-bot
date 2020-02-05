@@ -29,18 +29,18 @@ def weather(city):
     
     response=requests.get(url,headers=headers)
     response=response.json()
-
     condition=rainfall[response['forecasts'][0]["parts"]["day"]["condition"]]
-    return ("Погода на сегодня:\n{}\nВосход: {}\nЗакат: {}\nТемпература:\nНочью🌑: {}\nУтром🌞: {}\nДнем🌤: {}\nВечером🌓: {}\nОсадки:\n{}".format(response['forecasts'][0]["date"],response['forecasts'][0]["sunrise"],response['forecasts'][0]["sunset"],response['forecasts'][0]["parts"]["night"]["temp_avg"],response['forecasts'][0]["parts"]["morning"]["temp_avg"],response['forecasts'][0]["parts"]["day"]["temp_avg"],response['forecasts'][0]["parts"]["evening"]["temp_avg"], condition))
+    row = "\nПогода на сегодня:\n{}\nВосход: {}\nЗакат: {}\nТемпература:\nНочью🌑: {}\nУтром🌞: {}\nДнем🌤: {}\nВечером🌓: {}\nОсадки: {}\n".format(response['forecasts'][0]["date"],response['forecasts'][0]["sunrise"],response['forecasts'][0]["sunset"],response['forecasts'][0]["parts"]["night"]["temp_avg"],response['forecasts'][0]["parts"]["morning"]["temp_avg"],response['forecasts'][0]["parts"]["day"]["temp_avg"],response['forecasts'][0]["parts"]["evening"]["temp_avg"], condition)
+    row += "\nПогода на завтра:\n{}\nВосход: {}\nЗакат: {}\nТемпература:\nНочью🌑: {}\nУтром🌞: {}\nДнем🌤: {}\nВечером🌓: {}\nОсадки: {}\n".format(response['forecasts'][1]["date"],response['forecasts'][1]["sunrise"],response['forecasts'][1]["sunset"],response['forecasts'][1]["parts"]["night"]["temp_avg"],response['forecasts'][1]["parts"]["morning"]["temp_avg"],response['forecasts'][1]["parts"]["day"]["temp_avg"],response['forecasts'][1]["parts"]["evening"]["temp_avg"], condition)
+    row += "\nПогода на послезавтра:\n{}\nВосход: {}\nЗакат: {}\nТемпература:\nНочью🌑: {}\nУтром🌞: {}\nДнем🌤: {}\nВечером🌓: {}\nОсадки: {}\n".format(response['forecasts'][2]["date"],response['forecasts'][2]["sunrise"],response['forecasts'][2]["sunset"],response['forecasts'][2]["parts"]["night"]["temp_avg"],response['forecasts'][2]["parts"]["morning"]["temp_avg"],response['forecasts'][2]["parts"]["day"]["temp_avg"],response['forecasts'][2]["parts"]["evening"]["temp_avg"], condition)
+    return (row)
 
 
 def geo_coordinate(city):
     API_KEY="3b4143c7-9efc-46df-aaa3-c49b2d23b540"
     url=f"https://geocode-maps.yandex.ru/1.x/?apikey={API_KEY}&geocode={city}&format=json"
-    
+
     response=requests.get(url).json()
     response = list(response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split())
     
     return response[1], response[0]
-
-weather("Рузаевка")

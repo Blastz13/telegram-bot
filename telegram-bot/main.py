@@ -19,7 +19,7 @@ bot = telebot.TeleBot(token=config.TOKEN)
 user_markup_menu_timesheet = telebot.types.ReplyKeyboardMarkup(True, True)
 user_markup_menu_timesheet.row("/homework")
 user_markup_menu_timesheet.row("/schedule")
-user_markup_menu_timesheet.row("Меню")
+user_markup_menu_timesheet.row("/menu")
 
 user_do_menu = telebot.types.ReplyKeyboardMarkup(True, True)
 user_do_menu.row("/today")
@@ -28,7 +28,7 @@ user_do_menu.row("/week")
 user_do_menu.row("/add")
 user_do_menu.row("/edit")
 user_do_menu.row("/delete")
-user_do_menu.row("Меню")
+user_do_menu.row("/menu")
 
 
 
@@ -43,7 +43,7 @@ def start_message(message):
 
 	bot.send_message(message.from_user.id,
     "Здравствуйте😉!\n"
-    "Я Бот, который умеет:\nРаботать с расписанием📔 /timesheet\nCледить за финансами💰 /expenses\nОтслеживать курс валют💵 /course\nПоказывать погоду🌤 /weather\n"
+    "Я Бот, который умеет:\nРаботать с расписанием /timesheet\nCледить за финансами💰 /expenses\nОтслеживать курс валют💵 /course\nПоказывать погоду🌤 /weather\n"
 	,reply_markup=user_markup)
 
 @bot.message_handler(commands=['timesheet'])
@@ -246,7 +246,7 @@ def start_message(message):
 	user_markup2.row("/month")
 	user_markup2.row("/expenses")
 	user_markup2.row("/categories")
-	user_markup2.row("Меню")
+	user_markup2.row("/menu")
 	
 	bot.send_message(message.from_user.id,"Добавлять расходы: 250 такси\n"
 										"Сегодняшняя статистика: /today\n"
@@ -323,7 +323,7 @@ def process_coin_step(message):
 	try:
 		menu_remove=types.ReplyKeyboardRemove()
 		user_markup_menu = telebot.types.ReplyKeyboardMarkup(True, True)
-		user_markup_menu.row("Меню")
+		user_markup_menu.row("/menu")
 		user_markup_menu.row("/course")
 		bot.send_message(message.chat.id, course_json(message.text),reply_markup=user_markup_menu)
 
@@ -348,7 +348,7 @@ def process_weather_step(message):
 	try:
 		menu_remove=types.ReplyKeyboardRemove()
 		user_markup_menu = telebot.types.ReplyKeyboardMarkup(True, True)
-		user_markup_menu.row("Меню")
+		user_markup_menu.row("/menu")
 		user_markup_menu.row("/weather")
 		bot.send_message(message.chat.id, weather(message.text),reply_markup=user_markup_menu)
 
@@ -369,10 +369,8 @@ def add_expense(message):
 	bot.send_message(message.from_user.id, answer_message)
 
 
-@bot.message_handler(content_types=['text'])
+@bot.message_handler(commands=['menu'])
 def start_message(message):
-	"""Обработчик меню"""
-	if message.text == "Меню":
 		user_markup = telebot.types.ReplyKeyboardMarkup(True, True)
 		user_markup.row("/timesheet")
 		user_markup.row("/finance")
