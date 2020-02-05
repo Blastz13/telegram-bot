@@ -43,12 +43,8 @@ def start_message(message):
 
 	bot.send_message(message.from_user.id,
     "Здравствуйте😉!\n"
-    "Я Бот, который умеет:\nCледить за финансами💰 /expenses\nОтслеживать курс валют💵 /course\nПоказывать погоду🌤 /weather\n"
-	"Добавлять расходы: 250 такси\n"
-	"Сегодняшняя статистика: /today\n"
-	"За текущий месяц: /month\n"
-	"Последние расходы: /expenses\n"
-    "Категории трат: /categories",reply_markup=user_markup)
+    "Я Бот, который умеет:\nРаботать с расписанием📔 /timesheet\nCледить за финансами💰 /expenses\nОтслеживать курс валют💵 /course\nПоказывать погоду🌤 /weather\n"
+	,reply_markup=user_markup)
 
 @bot.message_handler(commands=['timesheet'])
 def start_message(message):
@@ -58,7 +54,7 @@ def start_message(message):
 @bot.message_handler(commands=['homework'])
 def start_message(message):
 	"""Ввывод команд для дз"""
-	msg = bot.send_message(message.chat.id, "-------------------:",reply_markup=user_do_menu)
+	msg = bot.send_message(message.chat.id, "Выберите команду:",reply_markup=user_do_menu)
 	bot.register_next_step_handler(msg, process_command_step_homework)
 
 def process_command_step_homework(message):
@@ -164,7 +160,7 @@ def delete_homework(message):
 @bot.message_handler(commands=['schedule'])
 def start_message(message):
 	"""Ввывод команд для расписания"""
-	msg = bot.send_message(message.chat.id, "-------------------:", reply_markup=user_do_menu)
+	msg = bot.send_message(message.chat.id, "Выберите команду:", reply_markup=user_do_menu)
 	bot.register_next_step_handler(msg, process_command_step_schedule)
 
 def process_command_step_schedule(message):
@@ -252,7 +248,12 @@ def start_message(message):
 	user_markup2.row("/categories")
 	user_markup2.row("Меню")
 	
-	bot.send_message(message.from_user.id,"Функции Бота для Финансов:",reply_markup=user_markup2)
+	bot.send_message(message.from_user.id,"Добавлять расходы: 250 такси\n"
+										"Сегодняшняя статистика: /today\n"
+										"За текущий месяц: /month\n"
+										"Последние расходы: /expenses\n"
+    									"Категории трат: /categories",
+										reply_markup=user_markup2)
 
 @bot.message_handler(commands=['expenses'])
 def list_expenses(message):

@@ -2,24 +2,24 @@ import requests
 
 def weather(city):
     rainfall = {
-    "clear" : "Ясно",
-    "partly-cloudy" : "Малооблачно",
-    "cloudy" : "Облачно с прояснениями",
-    "overcast" : "Пасмурно",
-    "partly-cloudy-and-light-rain" : "Небольшой дождь",
-    "partly-cloudy-and-rain" : "Дождь",
-    "overcast-and-rain" : "Сильный дождь",
-    "overcast-thunderstorms-with-rain" : "Сильный дождь, гроза",
-    "cloudy-and-light-rain" : "Небольшой дождь",
-    "overcast-and-light-rain" : "Небольшой дождь",
-    "cloudy-and-rain" : "Дождь",
-    "overcast-and-wet-snow" : "Дождь со снегом",
-    "partly-cloudy-and-light-snow" : "Небольшой снег",
-    "partly-cloudy-and-snow" : "Снег",
-    "overcast-and-snow" : "Снегопад",
-    "cloudy-and-light-snow" : "Небольшой снег",
-    "overcast-and-light-snow" : "Небольшой снег",
-    "cloudy-and-snow" : "Снег"}
+    "clear" : "Ясно☀️",
+    "partly-cloudy" : "Малооблачно🌥",
+    "cloudy" : "Облачно с прояснениями🌥",
+    "overcast" : "Пасмурно🌥",
+    "partly-cloudy-and-light-rain" : "Небольшой дождь🌦",
+    "partly-cloudy-and-rain" : "Дождь🌧",
+    "overcast-and-rain" : "Сильный дождь🌧",
+    "overcast-thunderstorms-with-rain" : "Сильный дождь, гроза⛈",
+    "cloudy-and-light-rain" : "Небольшой дождь🌦",
+    "overcast-and-light-rain" : "Небольшой дождь🌦",
+    "cloudy-and-rain" : "Дождь🌧",
+    "overcast-and-wet-snow" : "Дождь со снегом🌨",
+    "partly-cloudy-and-light-snow" : "Небольшой снег🌨",
+    "partly-cloudy-and-snow" : "Снег❄️",
+    "overcast-and-snow" : "Снегопад❄️",
+    "cloudy-and-light-snow" : "Небольшой снег❄️",
+    "overcast-and-light-snow" : "Небольшой снег❄️",
+    "cloudy-and-snow" : "Снег❄️"}
 
     coordinate = geo_coordinate(city)
     url=f"https://api.weather.yandex.ru/v1/forecast?lat={coordinate[0]}&lon={coordinate[1]}&lang=ru_RU&limit=1&extra=false"
@@ -42,3 +42,5 @@ def geo_coordinate(city):
     response = list(response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split())
     
     return response[1], response[0]
+
+weather("Рузаевка")
