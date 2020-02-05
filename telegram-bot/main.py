@@ -46,6 +46,17 @@ def start_message(message):
     "Я Бот, который умеет:\nРаботать с расписанием /timesheet\nCледить за финансами💰 /expenses\nОтслеживать курс валют💵 /course\nПоказывать погоду🌤 /weather\n"
 	,reply_markup=user_markup)
 
+
+@bot.message_handler(commands=['menu'])
+def start_message(message):
+		user_markup = telebot.types.ReplyKeyboardMarkup(True, True)
+		user_markup.row("/timesheet")
+		user_markup.row("/finance")
+		user_markup.row("/course")
+		user_markup.row("/weather")
+
+		bot.send_message(message.from_user.id, "Меню Бота:",reply_markup=user_markup)
+
 @bot.message_handler(commands=['timesheet'])
 def start_message(message):
 	"""Ввывод меню бота для расписания"""
@@ -271,6 +282,17 @@ def list_expenses(message):
             .join(last_expenses_rows)
     bot.send_message(message.from_user.id,answer_message)
 
+@bot.message_handler(regexp="^[0-9]{1,}")
+def add_expense(message):
+	"""Добавляет новый расход"""
+	try:
+		answ=message.text
+		expense = expenses.add_expense(answ)
+	except:
+		bot.send_message(message.from_user.id,"Вы ввели неверную команду")
+		return
+	answer_message ="Добавлены траты {} руб на {}\n\n".format(expense.amount,expense.category_name)
+	bot.send_message(message.from_user.id, answer_message)
 
 @bot.message_handler(regexp="/del[0-9]{1,}")
 def del_expense(message):
@@ -356,28 +378,6 @@ def process_weather_step(message):
 		bot.reply_to(message, 'ooops2!')
 
 
-@bot.message_handler(regexp="^[0-9]{1,}")
-def add_expense(message):
-	"""Добавляет новый расход"""
-	try:
-		answ=message.text
-		expense = expenses.add_expense(answ)
-	except:
-		bot.send_message(message.from_user.id,"Вы ввели неверную команду")
-		return
-	answer_message ="Добавлены траты {} руб на {}\n\n".format(expense.amount,expense.category_name)
-	bot.send_message(message.from_user.id, answer_message)
-
-
-@bot.message_handler(commands=['menu'])
-def start_message(message):
-		user_markup = telebot.types.ReplyKeyboardMarkup(True, True)
-		user_markup.row("/timesheet")
-		user_markup.row("/finance")
-		user_markup.row("/course")
-		user_markup.row("/weather")
-
-		bot.send_message(message.from_user.id, "Меню Бота:",reply_markup=user_markup)
 
 
 if __name__ == '__main__':
