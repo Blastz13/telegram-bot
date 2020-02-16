@@ -9,7 +9,7 @@ from course import course_json
 from weath import weather
 from categories import Categories
 import output
-import timesheet
+from timesheet import Homework, Lesson
 
 import config
 
@@ -71,7 +71,7 @@ def start_message(message):
 def process_command_step_homework(message):
 	if message.text == "/today":
 		try:
-			answer = timesheet.get_today_homework()
+			answer = Homework().get_today_homework()
 			bot.send_message(message.from_user.id, 
 							output.one_day_homework(answer),
 							reply_markup=user_markup_menu_timesheet)
@@ -82,7 +82,7 @@ def process_command_step_homework(message):
 	
 	elif message.text == "/tomorow":
 		try:
-			answer = timesheet.get_tomorow_homework()
+			answer = Homework().get_tomorow_homework()
 			bot.send_message(message.from_user.id, 
 							output.one_day_homework(answer),
 							reply_markup=user_markup_menu_timesheet)
@@ -93,7 +93,7 @@ def process_command_step_homework(message):
 	
 	elif message.text == "/week":	
 		try:
-			answer = timesheet.get_week_homework()
+			answer = Homework().get_week_homework()
 			bot.send_message(message.from_user.id, 
 							output.week_homework(answer),
 							reply_markup=user_markup_menu_timesheet)
@@ -130,7 +130,7 @@ def add_homework_hm(message, answer):
 	try:
 		response = message.text
 		answer.append(response)
-		response = timesheet.add_homework(answer)
+		response = Homework().add_homework(answer)
 	except:
 		bot.send_message(message.chat.id, "Ошибка", reply_markup=user_markup_menu_timesheet)
 		return
