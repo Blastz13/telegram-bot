@@ -3,15 +3,14 @@ from typing import Dict, List, Tuple
 
 import sqlite3
 
-
-conn = sqlite3.connect("db/finance.db", check_same_thread = False)
+conn = sqlite3.connect("db/finance.db", check_same_thread=False)
 cursor = conn.cursor()
 
 
 def insert(table: str, column_values: Dict):
-    columns = ', '.join( column_values.keys() )
+    columns = ', '.join(column_values.keys())
     values = [tuple(column_values.values())]
-    placeholders = ", ".join( "?" * len(column_values.keys()) )
+    placeholders = ", ".join("?" * len(column_values.keys()))
     cursor.executemany(
         f"INSERT INTO {table} "
         f"({columns}) "
@@ -61,31 +60,32 @@ def check_db_exists():
     _init_db()
 
 
-
-#CRUD
+# CRUD
 def create_homework(table: str, column_values: Dict):
     """Add homework"""
-    columns = ', '.join( column_values.keys() )
+    columns = ', '.join(column_values.keys())
     values = [tuple(column_values.values())]
-    placeholders = ", ".join( "?" * len(column_values.keys()) )
+    placeholders = ", ".join("?" * len(column_values.keys()))
     cursor.executemany(
         f"INSERT INTO {table} "
         f"({columns}) "
         f"VALUES ({placeholders})",
         values)
     conn.commit()
+
 
 def create_timetable_lesson(table: str, column_values: Dict):
     """Add lesson in timetable"""
-    columns = ', '.join( column_values.keys() )
+    columns = ', '.join(column_values.keys())
     values = [tuple(column_values.values())]
-    placeholders = ", ".join( "?" * len(column_values.keys()) )
+    placeholders = ", ".join("?" * len(column_values.keys()))
     cursor.executemany(
         f"INSERT INTO {table} "
         f"({columns}) "
         f"VALUES ({placeholders})",
         values)
     conn.commit()
+
 
 def get_today_homework(table: str, date: str) -> List[Tuple]:
     """Return today homework"""
@@ -96,6 +96,7 @@ def get_today_homework(table: str, date: str) -> List[Tuple]:
     rows = cursor.fetchall()
     return rows
 
+
 def get_tomorow_homework(table: str, date: str) -> List[Tuple]:
     """Return tomorow homework"""
     cursor.execute(f"""SELECT timesheet.dayweek , homework.date, timesheet.num, timesheet.lesson , homework.homework 
@@ -104,6 +105,7 @@ def get_tomorow_homework(table: str, date: str) -> List[Tuple]:
                         WHERE homework.date = '{date}'""")
     rows = cursor.fetchall()
     return rows
+
 
 def get_week_homework(table: str, date) -> List[Tuple]:
     """Return week homework"""
@@ -114,14 +116,15 @@ def get_week_homework(table: str, date) -> List[Tuple]:
     rows = cursor.fetchall()
     return rows
 
+
 def get_timetable_today(table: str, dayweek: str) -> List[Tuple]:
     """Displays the schedule for the day of the today"""
     cursor.execute(f"""SELECT * 
                     FROM {table} 
                     WHERE dayweek LIKE '{dayweek}%'""")
     rows = cursor.fetchall()
-    
     return rows
+
 
 def get_timetable_tomorow(table: str, dayweek: str) -> List[Tuple]:
     """Displays the schedule for the day of the tomorow"""
@@ -129,8 +132,8 @@ def get_timetable_tomorow(table: str, dayweek: str) -> List[Tuple]:
                     FROM {table} 
                     WHERE dayweek LIKE '{dayweek}%'""")
     rows = cursor.fetchall()
-    
     return rows
+
 
 def get_timetable_dayweek(table: str, dayweek: str) -> List[Tuple]:
     """Displays the schedule for the day of the week"""
@@ -139,8 +142,8 @@ def get_timetable_dayweek(table: str, dayweek: str) -> List[Tuple]:
                     FROM {table} 
                     WHERE dayweek LIKE '{dayweek}%'""")
     rows = cursor.fetchall()
-    
     return rows
+
 
 def get_all_timetable(table: str) -> List[Tuple]:
     """Displays the schedule for the day of the week"""
@@ -152,11 +155,10 @@ def get_all_timetable(table: str) -> List[Tuple]:
                                                               dayweek ='Суббота'  DESC,
                                                               dayweek ='Воскресенье' DESC""")
     rows = cursor.fetchall()
-    
     return rows
 
 
-#Delete
+# Delete
 def delete_homework_homework(table: str, dayweek: str, num: str, date: str):
     """Remove homework from timetable"""
     cursor.execute(f"""DELETE FROM '{table}' 
@@ -164,8 +166,8 @@ def delete_homework_homework(table: str, dayweek: str, num: str, date: str):
                         AND num='{num}' 
                         AND date='{date}'""")
     rows = conn.commit()
-    
     return rows
+
 
 def delete_lesson_timesheet(table: str, dayweek: str, num: str):
     """Remove lesson from timetable"""
@@ -173,11 +175,10 @@ def delete_lesson_timesheet(table: str, dayweek: str, num: str):
                         WHERE dayweek='{dayweek}' 
                         AND num='{num}'""")
     rows = conn.commit()
-    
-    return rows  
+    return rows
 
 
-#Update
+# Update
 def edit_timetable_lesson(table: str, dayweek: str, num: int, lesson: str):
     """Edits a lesson"""
     cursor.execute(f"""UPDATE '{table}' 
@@ -185,8 +186,8 @@ def edit_timetable_lesson(table: str, dayweek: str, num: int, lesson: str):
                         WHERE num='{num}' 
                         AND dayweek='{dayweek}'""")
     rows = conn.commit()
-    
     return rows
+
 
 def edit_homework_homework(table: str, *answer):
     """Edits a homework"""
@@ -196,7 +197,7 @@ def edit_homework_homework(table: str, *answer):
                         AND dayweek='{answer[0][0]}' 
                         AND date='{answer[0][2]}'""")
     rows = conn.commit()
-    
     return rows
+
 
 check_db_exists()

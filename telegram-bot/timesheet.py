@@ -1,13 +1,10 @@
 import datetime
-import re
-from typing import List, NamedTuple, Optional
-
-import pytz
 
 import db
 
-class Homework():
-    
+
+class Homework:
+
     def add_homework(self, parse_message):
         inserted_row = db.create_homework("homework", {
             "dayweek": parse_message[0],
@@ -32,7 +29,7 @@ class Homework():
         date = _get_week_date()
         answer = db.get_week_homework("homework", date)
         return answer
-    
+
     def delete_homework(self, raw_message):
         raw_message = list(raw_message.text.split())
         answer = db.delete_homework_homework("homework", raw_message[0], raw_message[1], raw_message[2])
@@ -43,11 +40,11 @@ class Homework():
         return
 
 
-class Lesson():
+class Lesson:
 
     def add_lesson(self, raw_message: str):
         raw_message = list(raw_message.text.split())
-        answer = db.create_timetable_lesson("timesheet",{
+        answer = db.create_timetable_lesson("timesheet", {
             "dayweek": raw_message[0].capitalize(),
             "num": raw_message[1],
             "lesson": raw_message[2].capitalize()})
@@ -61,7 +58,7 @@ class Lesson():
     def get_timetable_tomorow(self):
         dayweek = _get_dayweek_tomorow()
         answer = db.get_timetable_tomorow("timesheet", dayweek)
-        return answer    
+        return answer
 
     def get_timetable_dayweek(self, raw_message):
         answer = db.get_timetable_dayweek("timesheet", raw_message)
@@ -70,41 +67,45 @@ class Lesson():
     def get_all_timetable(self):
         return db.get_all_timetable("timesheet")
 
-
     def delete_lesson(self, raw_message):
         raw_message = list(raw_message.text.split())
         answer = db.delete_lesson_timesheet("timesheet", raw_message[0], raw_message[1])
         return
 
-    def edit_timetable_lesson(self, raw_message):
+    def edit_lesson(self, raw_message):
         raw_message = list(raw_message.text.split())
-        answer = db.edit_timetable_lesson("timesheet", raw_message[0], raw_message[1], raw_message[2])
+        answer = db.edit_lesson("timesheet", raw_message[0], raw_message[1], raw_message[2])
         return
+
 
 def _get_today_date():
     return datetime.datetime.today().strftime('%Y-%m-%d')
+
 
 def _get_tomorow_date():
     today = datetime.date.today()
     tomorrow = today + datetime.timedelta(days=1)
     return tomorrow.strftime('%Y-%m-%d')
 
+
 def _get_week_date():
     today = datetime.date.today()
-    days=datetime.datetime.today().weekday()
+    days = datetime.datetime.today().weekday()
     date_start = today - datetime.timedelta(days=days)
     date_end = date_start + datetime.timedelta(days=6)
-    week=Week(date_start.strftime('%Y-%m-%d'), date_end.strftime('%Y-%m-%d'))
+    week = Week(date_start.strftime('%Y-%m-%d'), date_end.strftime('%Y-%m-%d'))
     return week
 
+
 def _get_dayweek_today():
-    days=["Понедельник","Вторник","Среда","Четверг","Пятница","Суббота","Воскресенье"]
+    days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     today = datetime.date.today()
-    dayNumber=today.weekday()
+    dayNumber = today.weekday()
     return days[dayNumber]
 
+
 def _get_dayweek_tomorow():
-    days=["Понедельник","Вторник","Среда","Четверг","Пятница","Суббота","Воскресенье"]
+    days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     tomorow = datetime.date.today() + datetime.timedelta(days=1)
-    dayNumber=tomorow.weekday()
+    dayNumber = tomorow.weekday()
     return days[dayNumber]
