@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import telebot
 from telebot import types, apihelper
 
@@ -13,8 +14,7 @@ from timesheet import Homework, Lesson
 import config
 
 
-apihelper.proxy = config.PROXY
-bot = telebot.TeleBot(token=config.TOKEN)
+bot = telebot.TeleBot(token=os.getenv("TOKEN"))
 
 user_markup_menu = telebot.types.ReplyKeyboardMarkup(True, True)
 user_markup_menu.row("/timesheet")

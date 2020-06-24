@@ -1,9 +1,3 @@
-"""API_TOKEN"""
-TOKEN = '1094632546:AAGu4SvzqVs9wB4t1y7X1nzzJhFc4-yasms'
-
-"""PROXY"""
-PROXY = {'https': 'socks5://217.182.230.15:4485'}
-
 """API_KEY_WEATHER"""
 X_YANDEX_API_KEY = 'eece54d3-00b0-4527-9493-75b19c943ac0'
 
